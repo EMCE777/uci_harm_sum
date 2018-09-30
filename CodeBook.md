@@ -20,19 +20,19 @@ The Script is:
 lab <- read.table(file='./Project_Week4/UCI HAR Dataset/activity_labels.txt')
 names(lab) <- c("id_activity","activity")
 
-#Obtein training data
+# Obtein training data
 ytrain <- read.table(file='./Project_Week4/UCI HAR Dataset/train/y_train.txt')
 xtrain <- read.table(file='./Project_Week4/UCI HAR Dataset/train/X_train.txt')
 names(ytrain) <- c("id_activity")
 
-#Obtein test data
+# Obtein test data
 ytest <- read.table(file='./Project_Week4/UCI HAR Dataset/test/y_test.txt')
 xtest <- read.table(file='./Project_Week4/UCI HAR Dataset/test/X_test.txt')
 names(ytest) <- c("id_activity")
 
-#obtein features names
+# obtein features names
 feaNames <- read.table(file='./Project_Week4/UCI HAR Dataset/features.txt')
-#obtein subjects
+# obtein subjects
 subjTrain <- read.table(file='./Project_Week4/UCI HAR Dataset/train/subject_train.txt')
 subjTest <- read.table(file='./Project_Week4/UCI HAR Dataset/test/subject_test.txt')
 
@@ -56,11 +56,11 @@ xtest$activity <- actTest$activity
 xtrain$subject <- subjTrain[,1]
 xtest$subject <- subjTest[,1]
 
-#add flag source
+# add flag source
 xtrain$source <- c("train")
 xtest$source <- c("test")
 
-#merge data sets
+# merge data sets
 data <- rbind(xtrain,xtest)
 
 # to get cols with mean() or std()
