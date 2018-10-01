@@ -1,75 +1,86 @@
 This file describe the next R script called run_analysis.R that does the following.
 
-Merges the training and the test sets to create one data set.
+Tidy data set description
+The variables in the tidy data
 
-Extracts only the measurements on the mean and standard deviation for each measurement.
+Only all the variables estimated from mean and standard deviation in the tidy set were kept.
+mean(): Mean value
+std(): Standard deviation
+The data were averaged based on subject and activity group.
+Subject column is numbered sequentially from 1 to 30. Activity column has 6 types as listed below.
 
-Uses descriptive activity names to name the activities in the data set
-
-Appropriately labels the data set with descriptive variable names.
-
-From the data set in step 4, creates a second, independent tidy data set 
-with the average of each variable for each activity and each subject.
-
-The Script is:
-
-# run_analysis.R
-# 1. Merges the training and the test sets to create one data set.
-
-# Obtein activities labels
-lab <- read.table(file='./Project_Week4/UCI HAR Dataset/activity_labels.txt')
-names(lab) <- c("id_activity","activity")
-
-# Obtein training data
-ytrain <- read.table(file='./Project_Week4/UCI HAR Dataset/train/y_train.txt')
-xtrain <- read.table(file='./Project_Week4/UCI HAR Dataset/train/X_train.txt')
-names(ytrain) <- c("id_activity")
-
-# Obtein test data
-ytest <- read.table(file='./Project_Week4/UCI HAR Dataset/test/y_test.txt')
-xtest <- read.table(file='./Project_Week4/UCI HAR Dataset/test/X_test.txt')
-names(ytest) <- c("id_activity")
-
-# obtein features names
-feaNames <- read.table(file='./Project_Week4/UCI HAR Dataset/features.txt')
-# obtein subjects
-subjTrain <- read.table(file='./Project_Week4/UCI HAR Dataset/train/subject_train.txt')
-subjTest <- read.table(file='./Project_Week4/UCI HAR Dataset/test/subject_test.txt')
-
-
-# to set names for data set
-names(xtrain) <- feaNames[,2]
-names(xtest) <- feaNames[,2]
-
-# merge activities label and description
-actTrain <- merge(lab,ytrain)
-actTest <- merge(lab,ytest)
-
-# add activities to data set
-xtrain$id_activity <- actTrain$id_activity
-xtrain$activity <- actTrain$activity
-
-xtest$id_activity <- actTest$id_activity
-xtest$activity <- actTest$activity
-
-# add subject to data set
-xtrain$subject <- subjTrain[,1]
-xtest$subject <- subjTest[,1]
-
-# add flag source
-xtrain$source <- c("train")
-xtest$source <- c("test")
-
-# merge data sets
-data <- rbind(xtrain,xtest)
-
-# to get cols with mean() or std()
-colSelect <- grep(paste(c("mean()","std()","activity","subject"),collapse="|"),names(data))
-data <- data[,colSelect]
-data$subject <- as.factor(data$subject)
-
-# group by each activity and each subject and after that summarize all columns
-res <- data %>% group_by(activity,subject) %>% summarise_if(is.numeric,mean,na.rm =TRUE)
-
-# Write result to a file
-write.table(res, file="./Project_Week4/uci_har_sum.txt", row.names = FALSE)
+WALKING
+WALKING_UPSTAIRS
+WALKING_DOWNSTAIRS
+SITTING
+STANDING
+LAYING
+The tidy data contains 6 rows (averaged based on activity) and 68 columns (66 variables and activity labels).
+"activitylabel"
+"subject"
+"tBodyAcc-mean()-X"
+"tBodyAcc-mean()-Y"
+"tBodyAcc-mean()-Z"
+"tBodyAcc-std()-X"
+"tBodyAcc-std()-Y"
+"tBodyAcc-std()-Z"
+"tGravityAcc-mean()-X"
+"tGravityAcc-mean()-Y"
+"tGravityAcc-mean()-Z"
+"tGravityAcc-std()-X"
+"tGravityAcc-std()-Y"
+"tGravityAcc-std()-Z"
+"tBodyAccJerk-mean()-X"
+"tBodyAccJerk-mean()-Y"
+"tBodyAccJerk-mean()-Z"
+"tBodyAccJerk-std()-X"
+"tBodyAccJerk-std()-Y"
+"tBodyAccJerk-std()-Z"
+"tBodyGyro-mean()-X"
+"tBodyGyro-mean()-Y"
+"tBodyGyro-mean()-Z"
+"tBodyGyro-std()-X"
+"tBodyGyro-std()-Y"
+"tBodyGyro-std()-Z"
+"tBodyGyroJerk-mean()-X"
+"tBodyGyroJerk-mean()-Y"
+"tBodyGyroJerk-mean()-Z"
+"tBodyGyroJerk-std()-X"
+"tBodyGyroJerk-std()-Y"
+"tBodyGyroJerk-std()-Z"
+"tBodyAccMag-mean()"
+"tBodyAccMag-std()"
+"tGravityAccMag-mean()"
+"tGravityAccMag-std()"
+"tBodyAccJerkMag-mean()"
+"tBodyAccJerkMag-std()"
+"tBodyGyroMag-mean()"
+"tBodyGyroMag-std()"
+"tBodyGyroJerkMag-mean()"
+"tBodyGyroJerkMag-std()"
+"fBodyAcc-mean()-X"
+"fBodyAcc-mean()-Y"
+"fBodyAcc-mean()-Z"
+"fBodyAcc-std()-X"
+"fBodyAcc-std()-Y"
+"fBodyAcc-std()-Z"
+"fBodyAccJerk-mean()-X"
+"fBodyAccJerk-mean()-Y"
+"fBodyAccJerk-mean()-Z"
+"fBodyAccJerk-std()-X"
+"fBodyAccJerk-std()-Y"
+"fBodyAccJerk-std()-Z"
+"fBodyGyro-mean()-X"
+"fBodyGyro-mean()-Y"
+"fBodyGyro-mean()-Z"
+"fBodyGyro-std()-X"
+"fBodyGyro-std()-Y"
+"fBodyGyro-std()-Z"
+"fBodyAccMag-mean()"
+"fBodyAccMag-std()"
+"fBodyBodyAccJerkMag-mean()"
+"fBodyBodyAccJerkMag-std()"
+"fBodyBodyGyroMag-mean()"
+"fBodyBodyGyroMag-std()"
+"fBodyBodyGyroJerkMag-mean()"
+"fBodyBodyGyroJerkMag-std()"
